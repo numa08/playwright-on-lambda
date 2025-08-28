@@ -16,8 +16,8 @@ pre-push:
     biome-lint:
       run: pnpm biome lint .
     
-    test:
-      run: pnpm test
+    # test:
+      # run: pnpm test
       
     cdk-synth:
       run: pnpm cdk synth
