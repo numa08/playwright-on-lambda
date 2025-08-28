@@ -23,24 +23,31 @@ app.post('/mcp', async (req: Request, res: Response) => {
   const sessionId = req.headers['mcp-session-id'] as string;
   let transport: StreamableHTTPServerTransport;
   if (sessionId && transports.has(sessionId)) {
+    console.log('Session found:', sessionId);
     transport = transports.get(sessionId) as StreamableHTTPServerTransport;
   } else {
+    const server = await createMCPServer();
     transport = new StreamableHTTPServerTransport({
-      sessionIdGenerator: undefined,
+      sessionIdGenerator: () => {
+        return crypto.randomUUID();
+      },
+      onsessioninitialized: sessionId => {
+        console.log('Session initialized:', sessionId);
+        transports.set(sessionId, transport);
+      },
+      onsessionclosed: sessionId => {
+        console.log('Session closed:', sessionId);
+        transports.delete(sessionId);
+      },
     });
-    transport.sessionId = sessionId;
+    await server.connect(transport);
   }
 
   try {
-    const server = createMCPServer();
-
     res.on('close', () => {
       console.log('Request closed');
-      transport.close();
-      server.close();
     });
 
-    await server.connect(transport);
     await transport.handleRequest(req, res, req.body);
   } catch (error) {
     console.error('Error handling MCP request:', error);

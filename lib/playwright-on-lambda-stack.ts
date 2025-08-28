@@ -58,7 +58,7 @@ export class PlaywrightOnLambdaStack extends Stack {
       runtime: Runtime.FROM_IMAGE,
       role: lambdaRole,
       timeout: Duration.seconds(30),
-      memorySize: 512,
+      memorySize: 2048,
       environment: {
         LOG_LEVEL: 'INFO',
         AWS_LWA_INVOKE_MODE: 'response_stream',
