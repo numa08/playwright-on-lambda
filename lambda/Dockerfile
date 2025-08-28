@@ -25,6 +25,7 @@ WORKDIR /var/task
 
 # アプリケーションコードのコピー
 COPY main.ts .
+COPY mcp.ts .
 
 # 依存関係のキャッシュ（コールドスタート時間短縮）
 RUN timeout 10s deno run -A main.ts || [ $? -eq 124 ] || exit 1
