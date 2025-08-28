@@ -43,9 +43,9 @@ export class PlaywrightOnLambdaStack extends Stack {
     });
     // Lambda関数の作成（Asset Imageを使用してデプロイ時に自動ビルド）
     const lambdaFunction = new LambdaFunction(this, 'DenoLambdaFunction', {
-      code: Code.fromAssetImage(path.join(__dirname, '..', 'lambda'), {
-        // Dockerfileの場所を指定（lambdaディレクトリ内）
-        file: 'Dockerfile',
+      code: Code.fromAssetImage(path.join(__dirname, '..'), {
+        // ビルドはプロジェクトルートで行う
+        file: path.join('lambda', 'Dockerfile'),
         // ビルド時の引数（必要に応じて）
         buildArgs: {
           DENO_VERSION: '1.47.0',
@@ -57,7 +57,7 @@ export class PlaywrightOnLambdaStack extends Stack {
       handler: Handler.FROM_IMAGE,
       runtime: Runtime.FROM_IMAGE,
       role: lambdaRole,
-      timeout: Duration.seconds(30),
+      timeout: Duration.minutes(15),
       memorySize: 2048,
       environment: {
         LOG_LEVEL: 'INFO',
