@@ -1,0 +1,17 @@
+{
+  "tasks": {
+    "dev": "deno run --watch main.ts",
+    "start": "deno run main.ts"
+  },
+  "compilerOptions": {
+    "lib": ["deno.window", "dom"]
+  },
+  "lint": {
+    "include": ["./"],
+    "exclude": ["node_modules"]
+  },
+  "fmt": {
+    "include": ["./"],
+    "exclude": ["node_modules"]
+  }
+}
